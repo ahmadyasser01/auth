@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors"
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import connectDB from "./db/connect.js"
+import connectDB from "./db/connect.js";
+import userRouter from "./routes/user.js"
 // CONSTANTS
 dotenv.config();
 const PORT = process.env.PORT;
@@ -13,9 +14,10 @@ const app = express();
 
 // MIDDLEWARES
 app.use(cors());
+app.use(express.json());
 
 //ROUTES
-//app.use('/api/users');
+app.use('/api/users',userRouter);
 
 // SERVER
 connectDB(DBURI);
