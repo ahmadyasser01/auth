@@ -13,9 +13,13 @@ const PORT = process.env.PORT;
 const DBURI = process.env.MONGODB_URI ||'mongodb://127.0.0.1:27017';
 const app = express();
 
-
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
 // MIDDLEWARES
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
