@@ -10,7 +10,7 @@ const Navbar2 = () => {
             <Toolbar disableGutters >
                 icon
                 <Typography sx ={{ml:"2rem"}}>
-                    POMODO
+                    NAME
                 </Typography>
             </Toolbar>
         </Container>

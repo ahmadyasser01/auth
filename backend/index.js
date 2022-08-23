@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import connectDB from "./db/connect.js";
 import userRouter from "./routes/user.js"
 import secretRouter from "./routes/secret.js"
+import passportSetup from "./controllers/passport.js"
+
 
 // CONSTANTS
 dotenv.config();
@@ -26,10 +28,11 @@ app.use(cookieParser());
 //ROUTES
 app.use('/api/users',userRouter);
 app.use('/api/secret',secretRouter);
-app.use('/',(req,res)=>{
-    console.log(req.cookies);
-    res.send(req.cookies)
-})
+// app.use('/',(req,res)=>{
+//     console.log(req.cookies);
+//     res.send(req.cookies)
+// })
+/// PASSPORT
 
 
 // SERVER

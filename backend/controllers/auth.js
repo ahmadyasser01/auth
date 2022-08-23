@@ -31,19 +31,19 @@ const createSendToken = (user,statusCode,res)=>{
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    console.log(res);
-    res.status(statusCode).json({
-        status:'success',
-        token,
-        data:{
-            user
-        }
-    })
+    //console.log("res",res);
+    res.redirect("http://localhost:3000/")
+    // res.status(statusCode).json({
+    //     status:'success',
+    //     token,
+    //     data:{
+    //         user
+    //     }
+    // })
 }
 
 export const signup = async(req,res,next) => {
     try {
-        console.log(req.body);
         const newUser = await User.create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -53,7 +53,7 @@ export const signup = async(req,res,next) => {
         });
         return createSendToken(newUser,201,res);
     } catch (error) {
-        console.log(error);
+        console.log("err",error);
         res.status(400).json({
             status: 'error',
             message: error.message
@@ -80,7 +80,7 @@ export const login = async(req, res, next) => {
         
         
     } catch (error) {
-        console.log(error);
+        console.log("err",error);
         res.status(400).json({
             status: 'error',
             message: error.message
@@ -90,11 +90,15 @@ export const login = async(req, res, next) => {
 
 }
 export const logout = async(req, res, next) => {
-    res.cookie('jwt', 'loggedout', {
-        expires: new Date(Date.now() + 10 * 1000),
+    res.cookie('jwt', 'xxxx', {
+        expires: new Date(Date.now()),
         httpOnly: true
       });
-      res.status(200).json({ status: 'success' });  
+      console.log(res.cookie())
+      
+      res.status(200).json({
+         status: 'success',
+    user:null });  
 }
 export const protect = async (req, res,next) => {
     let token;
@@ -103,6 +107,9 @@ export const protect = async (req, res,next) => {
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token = req.headers.authorization.split(' ')[1];
         } 
+        else if(req.cookies.jwt){
+            token = req.cookies.jwt;
+        }
         // Check if token is Not found
         if(!token)
         {
@@ -133,7 +140,7 @@ export const protect = async (req, res,next) => {
          next();
 
     } catch (error) {
-        console.log(error);
+        console.log("err",error);
         res.status(400).json({
             status: 'error',
             message: error.message
@@ -207,3 +214,73 @@ export const resetPassword = async (req, res, next) =>{
     }
 }
 
+export const isSignedUpBefore = async (email) => {
+    const user = await User.findOne({email});
+    return user;
+}
+export const googleSignIn = async(req,res)=>{
+    try {
+        res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.header('Access-Control-Allow-Credentials', true);
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        const user = await isSignedUpBefore(req.user.emails[0].value);
+    console.log(req.user);
+    const firstName = req.user.name.givenName;
+    const lastName = req.user.name.familyName;
+    const email = req.user.emails[0].value;
+    const userName = req.user.id;
+    const photo = req.user.photos[0].value;
+    if(!user){
+        const newUser = await User.create({
+            firstName,
+            email,
+            lastName,
+            userName,
+            photo,
+            provider:req.user.provider
+        })
+        return createSendToken(newUser,201,res);
+    }
+    else if(user && user.provider !== 'google'){
+        console.log("error happened");
+        throw new Error("ACESSDENIED")
+    }
+    else {
+       return createSendToken(user,201,res);
+    }
+    } catch (error) {
+        return res.redirect(`http://localhost:3000/?${error.message}}`)    }
+       
+    }
+
+    export const githubSignIn = async(req,res)=>{
+        try {
+            
+        const user = await isSignedUpBefore(req.user.emails[0].value);
+        console.log(req.user,"user");
+        const firstName = req.user.username;
+        const email = req.user.emails[0].value;
+        const userName = req.user.id;
+        const photo = req.user.photos[0].value;
+        if(!user){
+            const newUser = await User.create({
+                firstName,
+                email,
+                userName,
+                photo,
+                provider:req.user.provider
+            })
+            return createSendToken(newUser,201,res);
+        }
+        else if(user && user.provider !== 'github'){
+            throw new Error("ACESSDENIED")
+        }
+        else {
+           return createSendToken(user,201,res);
+        }
+        } catch (error) {
+            return res.redirect(`http://localhost:3000/login?${error.message}}`)
+        }
+           
+        }

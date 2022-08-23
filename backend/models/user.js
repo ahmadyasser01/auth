@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema({
     },
     lastName:{
         type:String,
-        required:[true,"Last Name is required"],
         trim:true,
         maxLength:15
     },
@@ -44,6 +43,7 @@ const userSchema = new mongoose.Schema({
         
         }
     },
+    provider:{type:String},
     photo:{type:String},
     role:{ 
         type:String,

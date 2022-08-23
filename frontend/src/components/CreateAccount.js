@@ -1,4 +1,4 @@
-import { Box, Button, Divider, TextField } from '@mui/material'
+import { Box, Button, ButtonGroup, Divider, Grid, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import GoogleIcon from '@mui/icons-material/Google';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -25,8 +25,6 @@ const CreateAccount = () => {
               withCredentials: true,
               crossDomain: true
               ,headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}})
-            console.log(res.data);
-            console.log(res.cookie);
         }
         else {
             
@@ -37,26 +35,33 @@ const CreateAccount = () => {
     //     console.log(firstName);
     // },[firstName])
   return (
-    <Box component="form" sx={{display: 'flex',flexDirection: 'column', gap:"8px", textAlign: 'center'}}
+    <Grid className="signup-form" component="form" sx={{ height:"100%", width:"100%",display: 'flex',flexDirection: 'column', gap:{xs:"1px"}, textAlign: 'center',textAlign: 'center'}}
     onSubmit={handleSubmit}
     >
-      <Button variant="contained" sx={{mt:"0.5rem"}}>
+      <div className="signup-buttons">
+      <Button variant="contained" sx={{height: {xs:"50px"} ,width:{xs:"50%"} ,fontSize:{xs:"1px"}}}  >
         <GoogleIcon/>
-        Sign up with Google
+        <span>Google</span>
       </Button>
-      <Button variant="contained" sx={{mt:"0.5rem"}}>
+      <Button variant="contained" sx={{height: {xs:"50px"} ,width:{xs:"50%"} ,fontSize:{xs:"1px"}}} size="small" minWidth="auto" >
         <GitHubIcon />
-        Sign up with Github
+        <span>Github</span>
       </Button>
-      or
-      <Divider variant="inset" component="li" />
+      </div>
 
-      <TextField 
+     <div className="signup-fields">
+      <span>or
+      <Divider variant="inset" sx={{width:"100%"}} component="li" />
+      </span>
+     
+     <TextField 
         label="First Name"
        variant="filled"
        value={firstName}
        onChange={(e)=>setFirstName(e.target.value)}
-       required />
+       required
+       size="small"
+        />
 
       <TextField label="Last Name" variant="filled" required
        value={lastName}
@@ -77,12 +82,15 @@ const CreateAccount = () => {
       <TextField label="confirm password" variant="filled"  type="password" required 
         value={confirmPassword}
         onChange={(e)=>setConfirmPassword(e.target.value)}
+        
       />
-      <Button variant="contained" sx={{mt:"1rem"}} type="submit">
+      
+
+     </div>
+     <Button variant="contained" type="submit">
         Sign up with Email
       </Button>
-
-    </Box>
+    </Grid>
   )
 }
 
