@@ -8,10 +8,17 @@ import { Routes, Route, Link } from "react-router-dom";
 import CreateAccount from './components/CreateAccount';
 import Home from './pages/Home';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 
 function App() {
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  });
+  
   const [user,setUser] = useState(null);
   useEffect(()=>{
 
@@ -41,6 +48,8 @@ function App() {
   //   localStorage.setItem('user',JSON.stringify(user));
   // },[user]);
   return (
+    <ThemeProvider theme={darkTheme}>
+    <CssBaseline />
     <AuthContext.Provider value={{user,setUser}}>
       <div className='main'>
       <div >
@@ -52,6 +61,8 @@ function App() {
         </div>
       </div>
     </AuthContext.Provider>
+    </ThemeProvider>
+    
 
   );
 }

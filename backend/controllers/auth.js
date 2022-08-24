@@ -29,17 +29,21 @@ const createSendToken = (user,statusCode,res)=>{
     user.password = undefined;
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     //console.log("res",res);
-    res.redirect("http://localhost:3000/")
-    // res.status(statusCode).json({
-    //     status:'success',
-    //     token,
-    //     data:{
-    //         user
-    //     }
-    // })
+    if(user.provider!=null)
+    {res.redirect("http://localhost:3000")}
+    else{
+        res.status(statusCode).json({
+            status:'success',
+            token,
+            data:{
+                user
+            }
+        })
+        
+    }
 }
 
 export const signup = async(req,res,next) => {

@@ -4,14 +4,17 @@ import CreateAccount from '../components/CreateAccount'
 import Navbar2 from '../components/Navbar2'
 import SignIn from '../components/SignIn'
 import AuthContext from '../Context/AuthContext'
-
+import  { ReactComponent as Auth } from '../assets/auth.svg'
 const Login = () => {
   const {user,setUser} = useContext(AuthContext)
   const [signUp,setSignUp] = useState(true);
   console.log(signUp);
   return (
     <div className="login">  
-        <div className="login-left">pic</div>
+        <div className="login-left">
+          {/* <img src='./human.png'/> */}
+          <Auth/>
+        </div>
         <div className="login-right">
         
         <div className="login-container">
